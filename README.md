@@ -1,28 +1,72 @@
-# Microsoft GW-BASIC Interpreter Source Code
+# GW-BASIC Interpreter for Linux
 
-This repo contains the original source-code for Microsoft's GW-BASIC interpreter, as of 1983.
+A native C implementation of Microsoft's historical **GW-BASIC Interpreter**, transpiled/re-implemented to target modern Linux environments.
 
-## Announcement blog
-https://devblogs.microsoft.com/commandline/microsoft-open-sources-gw-basic/
+This repository builds upon Microsoft's 1983 GW-BASIC source release, porting its assembly execution semantics, line storage memory model, statement tokenizer, and mathematical evaluator into clean, portable C99 code.
 
-## Information
+---
 
-This repo:
+## 📁 Repository Structure
 
-1. Is being released for historical reference/interest purposes, and reflects the state of the GW-BASIC interpreter source code as it was in 1983
-1. Will not be modified - please do not submit PR's or request changes
-1. Contains no build scripts, makefiles, or tools required to generate executable binaries, nor does it contain any pre-built binaries / executables
+```
+├── bin/          # Compiled Linux binaries
+├── include/      # C Header files (gwbasic.h)
+├── src/          # C Source implementation of interpreter runtime
+│   ├── main.c        # Interactive REPL & CLI entry point
+│   ├── tokenizer.c   # Lexer & statement keyword tokenizer
+│   ├── eval.c        # Stack-based expression & math evaluator
+│   ├── runtime.c     # Program line storage & execution runtime
+│   ├── io_screen.c   # ANSI terminal screen management (CLS, LOCATE, COLOR)
+│   └── io_disk.c     # Disk program file I/O (SAVE, LOAD)
+├── tests/        # BASIC automated test scripts
+├── original/     # Original 1983 8086 Assembly source files & documentation
+├── Makefile      # Build system
+└── README.md     # Project documentation
+```
 
-## License
+---
 
-All files within this repo are released under the [MIT (OSI) License]( https://en.wikipedia.org/wiki/MIT_License) as per the [LICENSE file](https://github.com/Microsoft/GW-BASIC/blob/master/LICENSE) stored in the root of this repo.
+## 🛠️ Building & Running
 
-## Contributing
+### Requirements
+- GCC / Clang (supporting C99)
+- GNU Make
+- Standard Math Library (`libm`)
 
-The source files in this repo are for historical reference and will remain read-only and unmodified in their original state. Please  **do not** send Pull Requests suggesting any modifications to the source files.  
+### Build Instructions
+```bash
+# Compile the interpreter
+make
 
-Further contribution guidance can be found in the [Contributor's Guide](https://github.com/Microsoft/GW-BASIC/blob/master/CONTRIBUTING.md) stored in the root of this repo.
+# Run interactive REPL
+./bin/gwbasic
 
-## Code of Conduct
+# Execute a BASIC file directly
+./bin/gwbasic path/to/program.bas
+```
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).  For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+### Run Tests
+```bash
+make test
+```
+
+---
+
+## 📜 Supported Statements & Features
+
+- **Program Commands**: `RUN`, `LIST`, `NEW`, `SAVE`, `LOAD`, `SYSTEM`
+- **Control Flow & Variables**: `LET`, `PRINT`, `CLS`, `LOCATE`, `COLOR`
+- **Data Types**: Integer, Single Precision Float, Double Precision Float, and String values.
+- **Terminal Control**: Full ANSI terminal color and cursor positioning support.
+
+---
+
+## 🏛️ Historical Original Source
+
+The original 1983 8086 Assembly files, header files, and original Microsoft release documentation are preserved under the [`original/`](file:///home/rfocosi/workspace/GW-BASIC/original) directory for historical reference.
+
+---
+
+## 📄 License
+
+Original source code files are licensed under the MIT License by Microsoft Corporation.
