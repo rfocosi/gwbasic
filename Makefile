@@ -19,6 +19,7 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 
 test: $(TARGET)
-	./bin/gwbasic --test tests/run_all.bas
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh
 
 .PHONY: all clean test
