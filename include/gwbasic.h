@@ -106,6 +106,10 @@ typedef struct {
     Program program;
     bool running;
     size_t current_line_idx;
+    uint16_t current_line_num;
+    bool has_error;
+    uint16_t error_line_num;
+    int exit_code;
     uint16_t gosub_stack[128];
     size_t gosub_top;
 } InterpreterState;

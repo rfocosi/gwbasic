@@ -5,8 +5,12 @@ void init_interpreter(InterpreterState *state) {
     state->program.lines = NULL;
     state->program.count = 0;
     state->program.capacity = 0;
-    state->running = false;
+    state->running = true;
     state->current_line_idx = 0;
+    state->current_line_num = 0;
+    state->has_error = false;
+    state->error_line_num = 0;
+    state->exit_code = 0;
     state->gosub_top = 0;
 }
 
@@ -128,7 +132,15 @@ void execute_line(InterpreterState *state, const char *line_text) {
                     idx++;
                     Value val = eval_expression(state, tokens, token_count, &idx);
                     set_variable(state, var_name, val);
+                } else {
+                    state->has_error = true;
+                    state->error_line_num = state->current_line_num;
+                    state->running = false;
                 }
+            } else {
+                state->has_error = true;
+                state->error_line_num = state->current_line_num;
+                state->running = false;
             }
             break;
         }
@@ -184,12 +196,37 @@ void execute_line(InterpreterState *state, const char *line_text) {
             break;
         }
 
-        case TOK_SYSTEM:
+        case TOK_SYSTEM: {
+            idx++;
+            if (idx < token_count) {
+                Value status_val = eval_expression(state, tokens, token_count, &idx);
+                if (status_val.type == VAL_STRING) {
+                    printf("%s\n", status_val.val.s_val);
+                } else if (status_val.type == VAL_INT) {
+                    printf("%d\n", status_val.val.i_val);
+                } else if (status_val.type == VAL_SINGLE) {
+                    printf("%g\n", status_val.val.f_val);
+                } else if (status_val.type == VAL_DOUBLE) {
+                    printf("%g\n", status_val.val.d_val);
+                }
+            }
             state->running = false;
-            exit(0);
+            state->exit_code = 0;
+            break;
+        }
+
+        case TOK_REM:
+            break;
+
+        case TOK_END:
+            state->running = false;
+            state->exit_code = 0;
             break;
 
         default:
+            state->has_error = true;
+            state->error_line_num = state->current_line_num;
+            state->running = false;
             break;
     }
 
@@ -199,11 +236,20 @@ void execute_line(InterpreterState *state, const char *line_text) {
 void run_program(InterpreterState *state) {
     state->running = true;
     state->current_line_idx = 0;
+    state->has_error = false;
+    state->error_line_num = 0;
+    state->exit_code = 0;
 
     while (state->running && state->current_line_idx < state->program.count) {
         ProgramLine *line = &state->program.lines[state->current_line_idx];
+        state->current_line_num = line->line_num;
         state->current_line_idx++;
         execute_line(state, line->code);
+        if (state->has_error) {
+            state->running = false;
+            state->exit_code = state->error_line_num;
+            break;
+        }
     }
     state->running = false;
 }
