@@ -17,24 +17,28 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         run_program(&state);
+        int exit_status = state.has_error ? (state.error_line_num > 0 ? (state.error_line_num % 256) : 1) : state.exit_code;
         free_interpreter(&state);
-        return 0;
+        return exit_status;
     }
 
     if (argc >= 2) {
         if (io_load_program(&state, argv[1])) {
             run_program(&state);
+            int exit_status = state.has_error ? (state.error_line_num > 0 ? (state.error_line_num % 256) : 1) : state.exit_code;
+            free_interpreter(&state);
+            return exit_status;
         } else {
             fprintf(stderr, "File not found: %s\n", argv[1]);
+            free_interpreter(&state);
+            return 1;
         }
-        free_interpreter(&state);
-        return 0;
     }
 
     print_banner();
 
     char line_buf[MAX_LINE_LEN];
-    while (true) {
+    while (state.running) {
         if (!fgets(line_buf, sizeof(line_buf), stdin)) break;
 
         size_t len = strlen(line_buf);
@@ -45,9 +49,11 @@ int main(int argc, char *argv[]) {
         if (len > 0) {
             execute_line(&state, line_buf);
         }
+        if (!state.running) break;
         printf("Ok\n");
     }
 
+    int exit_status = state.has_error ? (state.error_line_num > 0 ? (state.error_line_num % 256) : 1) : state.exit_code;
     free_interpreter(&state);
-    return 0;
+    return exit_status;
 }

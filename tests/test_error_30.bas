@@ -1,0 +1,4 @@
+10 PRINT "Line 10 OK"
+20 PRINT "Line 20 OK"
+30 INVALID_COMMAND_XYZ
+40 PRINT "Line 40 Should Not Reach"
