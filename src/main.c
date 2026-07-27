@@ -7,9 +7,25 @@ static void print_banner(void) {
     printf("Ok\n");
 }
 
+static void print_usage(const char *prog_name) {
+    printf("Usage: %s [OPTION]... [FILE]\n\n", prog_name);
+    printf("GW-BASIC 3.23 (Linux Port) Interpreter\n\n");
+    printf("Options:\n");
+    printf("  -h, --help, -?    Display this help message and exit\n");
+    printf("  --test <file>     Run test file and return error status exit code\n\n");
+    printf("Arguments:\n");
+    printf("  FILE              Execute BASIC program file directly\n");
+}
+
 int main(int argc, char *argv[]) {
     InterpreterState state;
     init_interpreter(&state);
+
+    if (argc >= 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-?") == 0)) {
+        print_usage(argv[0]);
+        free_interpreter(&state);
+        return 0;
+    }
 
     if (argc >= 3 && strcmp(argv[1], "--test") == 0) {
         if (!io_load_program(&state, argv[2])) {

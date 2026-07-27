@@ -45,6 +45,9 @@ run_test "SYSTEM Status '1'" "tests/test_system_1.bas" 0 "1"
 run_test "SYSTEM Status 'OK'" "tests/test_system_ok.bas" 0 "OK"
 run_test "Comprehensive Suite" "tests/run_all.bas" 0 "All Basic commands executed successfully."
 run_test "Error Line Return Code" "tests/test_error_30.bas" 30 ""
+run_test "Help Flag (-h)" "-h" 0 "Usage:"
+run_test "Help Flag (--help)" "--help" 0 "Usage:"
+run_test "Help Flag (-?)" "-?" 0 "Usage:"
 
 echo "----------------------------------------"
 if [ "$FAILED" -eq 0 ]; then

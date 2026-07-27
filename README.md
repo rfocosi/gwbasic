@@ -38,6 +38,9 @@ This repository builds upon Microsoft's 1983 GW-BASIC source release, porting it
 # Compile the interpreter
 make
 
+# Display usage help
+./bin/gwbasic --help
+
 # Run interactive REPL
 ./bin/gwbasic
 

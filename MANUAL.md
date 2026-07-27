@@ -6,9 +6,15 @@ This manual describes the syntax, command line usage, and supported basic comman
 
 ## 1. Command Line Usage
 
-The `gwbasic` binary supports three execution modes:
+The `gwbasic` binary supports the following execution modes:
 
-### A. Interactive REPL Mode
+### A. Display Help Information
+Display command line usage and flags using `-h`, `--help`, or `-?`:
+```bash
+./bin/gwbasic -h
+```
+
+### B. Interactive REPL Mode
 Run `gwbasic` without arguments to launch the interactive prompt:
 ```bash
 ./bin/gwbasic
@@ -22,14 +28,14 @@ Ok
 ```
 In interactive mode, commands can be entered directly or stored as numbered program lines. Type `SYSTEM` or press `Ctrl+D` to exit.
 
-### B. Direct File Execution Mode
+### C. Direct File Execution Mode
 Run a BASIC source script directly from the Linux shell:
 ```bash
 ./bin/gwbasic path/to/program.bas
 ```
 The interpreter will load the file, execute all stored program statements, and exit back to the Linux shell upon completion.
 
-### C. Test Execution Mode
+### D. Test Execution Mode
 Run a test script using the `--test` flag:
 ```bash
 ./bin/gwbasic --test tests/run_all.bas
