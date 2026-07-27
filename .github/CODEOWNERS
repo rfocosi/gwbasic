@@ -1,0 +1,15 @@
+# GitHub CODEOWNERS file for GW-BASIC interpreter repository
+
+# Global default code owner
+* @rfocosi
+
+# Source implementation & headers
+/src/       @rfocosi
+/include/   @rfocosi
+
+# Test suite
+/tests/     @rfocosi
+
+# Documentation
+/README.md  @rfocosi
+/MANUAL.md  @rfocosi
